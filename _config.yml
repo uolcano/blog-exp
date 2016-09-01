@@ -13,6 +13,8 @@ defaults:
     values:
       layout: 'post'
       author: 'uolcano'
+      comments: true
+      share: true
 
 # Url is currently only used only for the RSS feed in feed.xml
 url: http://uolcano.github.io
