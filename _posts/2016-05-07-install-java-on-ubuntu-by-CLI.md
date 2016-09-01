@@ -1,6 +1,8 @@
 ---
 title: Install Java On Ubuntu By CommandLine
 date: 2016-05-07
+share: true
+comments: true
 category: Evironment Configuration
 tags:
 - Java
