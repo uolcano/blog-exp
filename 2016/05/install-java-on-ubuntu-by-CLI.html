@@ -1,0 +1,314 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ScriptLife</title>
+  <meta name="theme-color" content="#222222" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://uolcano.github.io/blog-exp/js/jquery.min.js"></script>
+  <script src="https://uolcano.github.io/blog-exp/js/bootstrap.min.js"></script>
+  <script src="https://uolcano.github.io/blog-exp/js/header.js"></script>
+  <script src="https://uolcano.github.io/blog-exp/js/toc.js"></script>
+  <link href="https://uolcano.github.io/blog-exp/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://uolcano.github.io/blog-exp/css/theme.css" rel="stylesheet">
+  <link href="https://uolcano.github.io/blog-exp/css/syntax.css" rel="stylesheet">
+  <link href="https://uolcano.github.io/blog-exp/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+  
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-83553632-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+  
+
+
+ <script type="text/javascript">
+  WebFontConfig = {
+    google: {
+      families: ['Ubuntu::latin']
+    }
+  };
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+  })();
+</script>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="https://uolcano.github.io/blog-exp/">ScriptLife</a>
+      </div>
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="https://uolcano.github.io/blog-exp/">/home</a></li>
+          <li><a href="https://uolcano.github.io/blog-exp/archive.html">/archive</a></li>
+          <li><a href="https://uolcano.github.io/blog-exp/tags.html">/tags</a></li>
+          <li><a href="https://uolcano.github.io/blog-exp/about.html">/about</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+              <h1><a href="https://uolcano.github.io/blog-exp/2016/05/install-java-on-ubuntu-by-CLI">Install Java On Ubuntu By CommandLine</a></h1>
+              <div class="post-meta">
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <time>07 May 2016</time>
+                </div>
+                <ul>
+                  
+                    <li><a href="https://uolcano.github.io/blog-exp/tag/Java">Java</a></li>
+                  
+                    <li><a href="https://uolcano.github.io/blog-exp/tag/Ubuntu">Ubuntu</a></li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <h2 id="installing-jrejdk">Installing JRE/JDK</h2>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo apt-get update  <span class="c"># update the package index</span>
+java -version  <span class="c"># check if java installed</span>
+sudo apt-get install default-jre  <span class="c"># install JRE</span>
+sudo apt-get install default-jdk  <span class="c"># install JDK, if necessary</span></code></pre></figure>
+
+<h2 id="setting-the-javahome-environment-variable">Setting the “JAVA_HOME” environment variable</h2>
+<p>1. find out the path of JAVA installation</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo update-alternatives --config java</code></pre></figure>
+
+<p>It perhaps returns:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">There is only one alternative <span class="k">in </span>link group java <span class="o">(</span>providing /usr/bin/java<span class="o">)</span>: /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java</code></pre></figure>
+
+<p>Then, <em>the path</em> is “/usr/lib/jvm/java-7-openjdk-amd64”, hold it.</p>
+
+<p>2. use nano to edit the file /etc/environment</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo nano /etc/environment</code></pre></figure>
+
+<p>In this file, append <em>the path</em>, holden just now, into the quotes, seperate by colon, like this:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">JAVA_HOME="your/other/paths:/usr/lib/jvm/java-7-openjdk-amd64"</code></pre></figure>
+
+<p>3. reload the file /etc/environment</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">source</span> /etc/environment</code></pre></figure>
+
+<p>4. check if java installed</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">java -version</code></pre></figure>
+
+<p>Finally, it maybe not have to set the environment variable. But I don’t test that.</p>
+
+<h2 id="refer">Refer</h2>
+<ul>
+  <li><a href="https://www.digitalocean.com/community/tutorials/how-to-install-java-on-ubuntu-with-apt-get/">How To Install Java on Ubuntu with Apt-Get | DigitalOcean</a></li>
+</ul>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://uolcano.github.io/blog-exp/2016/05/install-java-on-ubuntu-by-CLI" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://uolcano.github.io/blog-exp/2016/05/install-java-on-ubuntu-by-CLI&text=Install Java On Ubuntu By CommandLine" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-google-plus">
+      <a href="https://plus.google.com/share?url=https://uolcano.github.io/blog-exp/2016/05/install-java-on-ubuntu-by-CLI" target="_blank" title="Share on Google Plus">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-google-plus fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://uolcano.github.io/blog-exp/2016/05/install-java-on-ubuntu-by-CLI&title=Install Java On Ubuntu By CommandLine&summary=&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-pinterest">
+      <a href="http://pinterest.com/pin/create/button/?urlhttps://uolcano.github.io/blog-exp/2016/05/install-java-on-ubuntu-by-CLI=&description=" target="_blank" title="Pin it">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-pinterest fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:yucan_unique@163.com?subject=Install Java On Ubuntu By CommandLine&body= https://uolcano.github.io/blog-exp/2016/05/install-java-on-ubuntu-by-CLI" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+              
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li class="recentPosts"><a href="https://uolcano.github.io/blog-exp/2016/09/how-to-roll-back-commit(s)">How to roll back your unwanted commit(s)</a></li>
+    
+    <li class="recentPosts"><a href="https://uolcano.github.io/blog-exp/2016/08/using-jekyll-to-build-a-website-on-github-pages">Using jekyll to build a website on GitHub Pages</a></li>
+    
+    <li class="recentPosts"><a href="https://uolcano.github.io/blog-exp/2016/05/install-java-on-ubuntu-by-CLI">Install Java On Ubuntu By CommandLine</a></li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul>
+    
+      <li class="sideBarTags"><a href="https://uolcano.github.io/blog-exp/tag/Java">Java</a></li>
+    
+      <li class="sideBarTags"><a href="https://uolcano.github.io/blog-exp/tag/Ubuntu">Ubuntu</a></li>
+    
+      <li class="sideBarTags"><a href="https://uolcano.github.io/blog-exp/tag/jekyll">jekyll</a></li>
+    
+      <li class="sideBarTags"><a href="https://uolcano.github.io/blog-exp/tag/GitHub Pages">GitHub Pages</a></li>
+    
+      <li class="sideBarTags"><a href="https://uolcano.github.io/blog-exp/tag/git">git</a></li>
+    
+  </ul>
+</div>
+
+        </div>
+      </div>
+    </div>
+    
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'ScriptLife'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2016/05/install-java-on-ubuntu-by-CLI";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>uolcano &copy; 2016&nbsp;&nbsp;&nbsp;&nbsp;powered by <a href="https://github.com/streetturtle/jekyll-clean-dark">Pavel Makhov</a></p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+    <li>
+      <a title="uolcano on Github" href="https://github.com/uolcano" target="_blank"><i class="fa fa-github fa-2x"></i></a>
+    </li>
+  
+
+  
+    <li>
+      <a title="uolcano on codepen" href="http://codepen.io/uolcano" target="_blank"><i class="fa fa-codepen fa-2x"></i></a>
+    </li>
+  
+
+  
+    <li>
+      <a title="feed.xml RSS" href="https://uolcano.github.io/blog-exp/feed.xml" target="_blank"><i class="fa fa-rss fa-2x"></i></a>
+    </li>
+  
+
+</ul>
+
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>
