@@ -369,7 +369,8 @@ nav.shrink .navbar-toggle {
   content: '\f0f6';
   @include before();
 }
-.sideBarTags:before {
+.tag:before,
+.sideBarTag:before {
   content: '\f02b';
   @include before();
 }

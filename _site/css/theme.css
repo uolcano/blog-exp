@@ -303,7 +303,8 @@ nav.shrink .navbar-toggle {
   margin-left: -1.5em;
   color: #ddd; }
 
-.sideBarTags:before {
+.tag:before,
+.sideBarTag:before {
   content: '\f02b';
   font-family: 'FontAwesome';
   float: left;
