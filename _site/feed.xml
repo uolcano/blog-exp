@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>ScriptLife</title>
+		<description>Front End Developer</description>
+		<link>https://uolcano.github.io/blog-exp</link>
+		<atom:link href="https://uolcano.github.io/blog-exp/feed.xml" rel="self" type="application/rss+xml" />
+		
+			<item>
+				<title>How to roll back your unwanted commit(s)</title>
+				<description>&lt;p&gt;Sometimes we need roll back our git commit or change the commit history in project.&lt;/p&gt;
+
+&lt;h2 id=&quot;locally-change-the-commit&quot;&gt;Locally change the commit&lt;/h2&gt;
+
+&lt;p&gt;1. revise the latest commit&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# only change the commit content
+&lt;/span&gt;
+git commit --amend &lt;span class=&quot;c&quot;&gt;# it will bring you into a text editor interface to change latest commit content
+&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# or only change the file operation
+&lt;/span&gt;
+git add &amp;lt;filename&amp;gt; &lt;span class=&quot;c&quot;&gt;# or git rm
+&lt;/span&gt;
+git commit --amend &lt;span class=&quot;c&quot;&gt;# reguard the unstaged as the latest commit&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;2. revise multiple commits before the latest commit, rebasing&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# view commit log
+&lt;/span&gt;
+git log
+&lt;span class=&quot;c&quot;&gt;# start the rebasing
+&lt;/span&gt;
+git rebase -i HEAD~3 &lt;span class=&quot;c&quot;&gt;# then change the latest four commits, include HEAD~3 parent commit
+&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# change the 'pick' into 'edit', save and exit editor, i.e. 'edit b928584 3rd commit changed'
+&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# only change the commit content
+&lt;/span&gt;
+git commit --amend
+&lt;span class=&quot;c&quot;&gt;# or only change the file operation as above
+&lt;/span&gt;
+git add &amp;lt;filename&amp;gt; &lt;span class=&quot;c&quot;&gt;# or git rm
+&lt;/span&gt;
+git commit --amend
+&lt;span class=&quot;c&quot;&gt;# end the rebase
+&lt;/span&gt;
+git rebase --continue
+&lt;span class=&quot;c&quot;&gt;# view commit log
+&lt;/span&gt;
+git log&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;3. reorder or remove some specific commit, rebasing&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git rebase -i HEAD~3
+&lt;span class=&quot;c&quot;&gt;# when editor opened, change the order of commit, 
+&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# or remove a commit line, maybe need to use 'git add --all' and 'git commit --amend' to fix the conflict&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;4. squash or compress multiple commits, rebasing&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git rebase -i HEAD~3&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;when editor opened, change latest 2 commits, such as&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;pick c8a735a 1st commit
+squash c15d014 2nd commit
+squash e9ab4f5 latest commit&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;these three commits will meld into the ‘1st commit’&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git commit --amend &lt;span class=&quot;c&quot;&gt;# then edit the '1st commit'
+&lt;/span&gt;
+git rebase --continue&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;5. rebasing command also can splitting a commit&lt;/p&gt;
+
+&lt;p&gt;6. reset the HEAD index&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git reset &amp;lt;commit &lt;span class=&quot;nb&quot;&gt;hash&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&amp;lt;filename&amp;gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;7. revert a commit&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git revert &amp;lt;commit &lt;span class=&quot;nb&quot;&gt;hash&lt;/span&gt;&amp;gt; &lt;span class=&quot;c&quot;&gt;# commit a rollback to undo some specific commit&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;6. ultimate solution: filter-branch&lt;br /&gt;
+worked on the entire commit history, not just one commit&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git filter-branch --tree-filter &lt;span class=&quot;s1&quot;&gt;'rm -f passwords.txt'&lt;/span&gt; HEAD &lt;span class=&quot;c&quot;&gt;# remove all passwords.txt in every commit
+&lt;/span&gt;
+git filter-branch --tree-filter &lt;span class=&quot;s1&quot;&gt;'rm -f *~'&lt;/span&gt; HEAD &lt;span class=&quot;c&quot;&gt;# remove all unexpected backup file
+&lt;/span&gt;
+git filter-branch --subdirectory-filter trunk HEAD &lt;span class=&quot;c&quot;&gt;# make the trunk directory as a new root directory of all the commit&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;change-the-remote-commit&quot;&gt;Change the remote commit&lt;/h2&gt;
+&lt;p&gt;after the operation abvoe, you can change the remote commit&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git push origin branch &lt;span class=&quot;c&quot;&gt;# used when git revert, recommended
+&lt;/span&gt;
+git push --f origin branch &lt;span class=&quot;c&quot;&gt;# 'origin branch' is optional for 'master' branch by default, danger&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;danger-command&quot;&gt;Danger command&lt;/h2&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git reset --hard &amp;lt;commit &lt;span class=&quot;nb&quot;&gt;hash&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&amp;lt;filename&amp;gt;] &lt;span class=&quot;c&quot;&gt;# this is a danger command, to discard all works in working directory
+&lt;/span&gt;
+git checkout -- &amp;lt;filename&amp;gt; &lt;span class=&quot;c&quot;&gt;# you will lose your primary file&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;recover-your-revision&quot;&gt;Recover your revision&lt;/h2&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git reflog &lt;span class=&quot;c&quot;&gt;# find the commit hash before your revision
+&lt;/span&gt;
+git reset &amp;lt;commit &lt;span class=&quot;nb&quot;&gt;hash&lt;/span&gt;&amp;gt; &lt;span class=&quot;c&quot;&gt;# move index to the commit&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;refer&quot;&gt;Refer&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History&quot;&gt;Git-Tools-Rewriting-History&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://blog.mtxcxin.cn/blog/git%E5%A6%82%E4%BD%95%E5%9B%9E%E6%BB%9A%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93.html&quot;&gt;git如何回滚远程仓库&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<pubDate>Thu, 01 Sep 2016 00:00:00 +0000</pubDate>
+				<link>https://uolcano.github.io/blog-exp/2016/09/how-to-roll-back-commit(s)</link>
+				<guid isPermaLink="true">https://uolcano.github.io/blog-exp/2016/09/how-to-roll-back-commit(s)</guid>
+			</item>
+		
+			<item>
+				<title>Using jekyll to build a website on GitHub Pages</title>
+				<description>&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+&lt;p&gt;1. ruby&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;curl -L https://get.rvm.io | bash -s stable --autolibs&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;enabled --ruby&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;2. bundler, used to fix the jekyll gems dependencies&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;gem install bundler&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;3. jekyll&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;gem install jekyll
+
+vim Gemfile &lt;span class=&quot;c&quot;&gt;# add under two lines to Gemfile
+&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'https://rubygems.org'&lt;/span&gt;
+gem &lt;span class=&quot;s1&quot;&gt;'github-pages'&lt;/span&gt;, group: :jekyll-plugins
+
+bundle install&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;4. git&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sudo apt-get install git &lt;span class=&quot;c&quot;&gt;# on ubuntu
+&lt;/span&gt;
+git config --global color.ui &lt;span class=&quot;nb&quot;&gt;true
+&lt;/span&gt;git config --global user.name &lt;span class=&quot;s1&quot;&gt;'your name'&lt;/span&gt;
+git config --global user.email &lt;span class=&quot;s1&quot;&gt;'your@email.com'&lt;/span&gt;
+git config -l &lt;span class=&quot;c&quot;&gt;# list the configuration
+&lt;/span&gt;
+
+ssh-keygen -rsa -C &lt;span class=&quot;s1&quot;&gt;'your@email.com'&lt;/span&gt;
+cat ~/.ssh/id_rsa.pub &lt;span class=&quot;c&quot;&gt;# copy and paste the public key into the GitHub Setting-&amp;gt;SSH and GPG keys-&amp;gt;SSH keys-&amp;gt;new SSH key
+&lt;/span&gt;
+ssh -T git@github.com &lt;span class=&quot;c&quot;&gt;# connect your GitHub account
+&lt;/span&gt;
+
+git config --global alias.lg &lt;span class=&quot;s2&quot;&gt;&quot;log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&amp;lt;%an&amp;gt;%Creset' --abbrev-commit&quot;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# set a pretty git log&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;site-repository&quot;&gt;Site repository&lt;/h2&gt;
+&lt;p&gt;1. clone a theme&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone git@github.com:jekyll/aThemeRepo.git &lt;span class=&quot;c&quot;&gt;# clone a theme
+&lt;/span&gt;
+mkdir blog
+cp aThemeRepo/&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; blog
+rm -rf .git&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;2. or build a clean template&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;jekyll new blog &lt;span class=&quot;c&quot;&gt;# quickly create
+&lt;/span&gt;
+bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;jekyll new blog --force &lt;span class=&quot;c&quot;&gt;# or stably create
+&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;blog
+
+vim Gemfile &lt;span class=&quot;c&quot;&gt;# edit Gemfile
+&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'https://ruby.taobao.org/'&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# perhaps need to set ENV_VAR, the primary source is https:/rubygems.org
+&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;'jekyll'&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;'3.2.1'&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# comment it
+&lt;/span&gt;
+gem &lt;span class=&quot;s1&quot;&gt;'github-pages'&lt;/span&gt;, group: :jekyll_plugins &lt;span class=&quot;c&quot;&gt;# uncomment it
+&lt;/span&gt;
+
+bundle install&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;3. change the &lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yml&quot; data-lang=&quot;yml&quot;&gt;&lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;blog&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;name'&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;your&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;profile'&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;encoding&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;utf-8'&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;defaults:&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;scope:&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+      &lt;span class=&quot;s&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+      &lt;span class=&quot;s&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;posts'&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;value:&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+      &lt;span class=&quot;s&quot;&gt;layout&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;the&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;post.html&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;or&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;default.html&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;./_layouts&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;path'&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+      &lt;span class=&quot;s&quot;&gt;author&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;yourname/nickname'&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;http(s)://your.site.com'&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;baseurl&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/your/project/path&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;or&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;blank'&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;social:&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;github&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;yourname/nickname'&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;codepen&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;yourname/nickname'&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;rss&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;feed.xml&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+
+&lt;span class=&quot;s&quot;&gt;disqus&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;yourname/nickname'&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;4. change &lt;code class=&quot;highlighter-rouge&quot;&gt;_includes/social.html&lt;/code&gt; for the social buttons&lt;/p&gt;
+
+&lt;p&gt;5. change &lt;code class=&quot;highlighter-rouge&quot;&gt;_includes/footer.html&lt;/code&gt; for the footer information&lt;/p&gt;
+
+&lt;p&gt;6. change &lt;code class=&quot;highlighter-rouge&quot;&gt;_includes/sidebar.html&lt;/code&gt; for the blog sidebar&lt;/p&gt;
+
+&lt;p&gt;7. set theme.scss for the change of &lt;code class=&quot;highlighter-rouge&quot;&gt;_includes/*&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;8. write your posts in &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory&lt;br /&gt;
+name the post files like &lt;code class=&quot;highlighter-rouge&quot;&gt;2016-08-31-building-a-website.md&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;the header of the posts:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;---
+layout: post
+title: your post title
+date: year-month-day
+---&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;9. push into your site repository&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git init
+git branch --orphan gh-pages &lt;span class=&quot;c&quot;&gt;# currently master branch also can deploy the GitHub Pages
+&lt;/span&gt;
+
+jekyll build &lt;span class=&quot;c&quot;&gt;# generate the page files from your markdown files
+&lt;/span&gt;
+bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;jekyll build &lt;span class=&quot;c&quot;&gt;# or stably build
+&lt;/span&gt;
+jekyll serve &lt;span class=&quot;c&quot;&gt;# preview the site locally
+&lt;/span&gt;
+bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;jekyll serve &lt;span class=&quot;c&quot;&gt;# or statby preview
+&lt;/span&gt;
+
+git add --all
+git commit -m &lt;span class=&quot;s1&quot;&gt;'initial commit'&lt;/span&gt;
+git remote add origin git@github.com:yourname/blog.git
+git push origin gh-pages&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Then, all done. You can visit your website by yourname.github.io/blog&lt;br /&gt;
+Each time you publish your posts, you just need:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;jekyll build &lt;span class=&quot;c&quot;&gt;# quickly generate page files
+&lt;/span&gt;
+git add --all
+git commit -m &lt;span class=&quot;s1&quot;&gt;'commit description'&lt;/span&gt;
+git push origin gh-pages&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;more&quot;&gt;More&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://help.github.com/articles/using-jekyll-as-a-static-site-generator-with-github-pages/&quot;&gt;Using Jekyll as a static site generator with GitHub Pages&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://jekyllrb.com/docs/home/&quot;&gt;jekyllrb docs&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/jekyll/jekyll-help/issues/225&quot;&gt;jekyll vs bundle exec jekyll&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<pubDate>Wed, 31 Aug 2016 00:00:00 +0000</pubDate>
+				<link>https://uolcano.github.io/blog-exp/2016/08/using-jekyll-to-build-a-website-on-github-pages</link>
+				<guid isPermaLink="true">https://uolcano.github.io/blog-exp/2016/08/using-jekyll-to-build-a-website-on-github-pages</guid>
+			</item>
+		
+			<item>
+				<title>Install Java On Ubuntu By CommandLine</title>
+				<description>&lt;h2 id=&quot;installing-jrejdk&quot;&gt;Installing JRE/JDK&lt;/h2&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sudo apt-get update  &lt;span class=&quot;c&quot;&gt;# update the package index&lt;/span&gt;
+java -version  &lt;span class=&quot;c&quot;&gt;# check if java installed&lt;/span&gt;
+sudo apt-get install default-jre  &lt;span class=&quot;c&quot;&gt;# install JRE&lt;/span&gt;
+sudo apt-get install default-jdk  &lt;span class=&quot;c&quot;&gt;# install JDK, if necessary&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;setting-the-javahome-environment-variable&quot;&gt;Setting the “JAVA_HOME” environment variable&lt;/h2&gt;
+&lt;p&gt;1. find out the path of JAVA installation&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sudo update-alternatives --config java&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;It perhaps returns:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;There is only one alternative &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;link group java &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;providing /usr/bin/java&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Then, &lt;em&gt;the path&lt;/em&gt; is “/usr/lib/jvm/java-7-openjdk-amd64”, hold it.&lt;/p&gt;
+
+&lt;p&gt;2. use nano to edit the file /etc/environment&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sudo nano /etc/environment&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;In this file, append &lt;em&gt;the path&lt;/em&gt;, holden just now, into the quotes, seperate by colon, like this:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;JAVA_HOME=&quot;your/other/paths:/usr/lib/jvm/java-7-openjdk-amd64&quot;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;3. reload the file /etc/environment&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; /etc/environment&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;4. check if java installed&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;java -version&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Finally, it maybe not have to set the environment variable. But I don’t test that.&lt;/p&gt;
+
+&lt;h2 id=&quot;refer&quot;&gt;Refer&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.digitalocean.com/community/tutorials/how-to-install-java-on-ubuntu-with-apt-get/&quot;&gt;How To Install Java on Ubuntu with Apt-Get | DigitalOcean&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<pubDate>Sat, 07 May 2016 00:00:00 +0000</pubDate>
+				<link>https://uolcano.github.io/blog-exp/2016/05/install-java-on-ubuntu-by-CLI</link>
+				<guid isPermaLink="true">https://uolcano.github.io/blog-exp/2016/05/install-java-on-ubuntu-by-CLI</guid>
+			</item>
+		
+	</channel>
+</rss>
